@@ -15,4 +15,4 @@ Route::post('/check-out', [ParkingController::class, 'checkOut']);
 Route::apiResource('areas', ParkingAreaController::class);
 Route::get('/reports/occupancy', [ReportController::class, 'occupancy']);
 Route::get('/reports/revenue', [ReportController::class, 'revenue']);
-
+Route::get('/parking/active', [ParkingController::class, 'active']);

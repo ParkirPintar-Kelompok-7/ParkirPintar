@@ -98,7 +98,7 @@ Contoh body:
 ### Langkah
 
 ```bash
-git clone https://github.com/AyodhSC/ParkirPintar
+git clone https://github.com/ParkirPintar-Kelompok-7/ParkirPintar
 cd ParkirPintar
 composer install
 cp .env.example .env        # di CMD/PowerShell: copy .env.example .env

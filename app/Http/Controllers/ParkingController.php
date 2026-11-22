@@ -90,4 +90,32 @@ class ParkingController extends Controller
             ]);
         });
     }
+
+        public function active(ParkingFeeCalculator $calculator): JsonResponse
+    {
+        $now = now();
+
+        $vehicles = ParkingRecord::with('area')
+            ->where('status', 'ACTIVE')
+            ->orderBy('check_in_at')
+            ->get()
+            ->map(function ($record) use ($calculator, $now) {
+                // Jaga-jaga jika jam sistem pernah diubah mundur setelah check-in
+                $until = $now->lessThan($record->check_in_at) ? $record->check_in_at : $now;
+
+                return [
+                    'id' => $record->id,
+                    'plate_number' => $record->plate_number,
+                    'vehicle_type' => $record->vehicle_type,
+                    'parking_area_id' => $record->parking_area_id,
+                    'area_name' => $record->area->name,
+                    'check_in_at' => $record->check_in_at->toIso8601String(),
+                    'duration_minutes' => intdiv($until->getTimestamp() - $record->check_in_at->getTimestamp(), 60),
+                    'estimated_fee' => $calculator->calculate($record->vehicle_type, $record->check_in_at, $until),
+                ];
+            })
+            ->values();
+
+        return response()->json(['data' => $vehicles]);
+    }
 }

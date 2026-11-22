@@ -13,14 +13,16 @@ class ParkingAreaSeeder extends Seeder
      */
     public function run(): void
     {
-        ParkingArea::create([
+        ParkingArea::updateOrCreate([
             'name' => 'Area A',
+        ], [
             'capacity_motor' => 50,
             'capacity_mobil' => 30,
         ]);
 
-        ParkingArea::create([
+        ParkingArea::updateOrCreate([
             'name' => 'Area B',
+        ], [
             'capacity_motor' => 40,
             'capacity_mobil' => 20,
         ]);
