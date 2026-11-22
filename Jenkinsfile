@@ -7,7 +7,13 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    environment {
+        IMAGE_REPO = 'fdhil17/parkirpintar'
+    }
+
     stages {
+
+        // STAGE 1: CHECKOUT
         stage('Checkout') {
             steps {
                 checkout scm
@@ -15,6 +21,7 @@ pipeline {
             }
         }
 
+        // STAGE 2: AUTOMATED TEST
         stage('Test') {
             steps {
                 bat 'docker build -f ci/Dockerfile.test -t parkirpintar-test:local ci'
@@ -70,8 +77,128 @@ pipeline {
                 }
             }
         }
+
+        // STAGE 3: BUILD DOCKER IMAGE
+        stage('Build Image') {
+            steps {
+                echo 'Membangun Docker image ParkirPintar...'
+
+                bat 'docker compose version'
+
+                bat '''
+@echo off
+docker build -t %IMAGE_REPO%:%BUILD_NUMBER% -t %IMAGE_REPO%:latest .
+if errorlevel 1 exit /b 1
+'''
+
+                echo 'Docker image berhasil dibuat'
+            }
+        }
+
+        // STAGE 4: PUSH IMAGE KE DOCKER HUB
+        stage('Push Image') {
+            steps {
+                echo 'Mengunggah image ParkirPintar ke Docker Hub...'
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-parkirpintar',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_TOKEN'
+                    )
+                ]) {
+                    script {
+                        try {
+                            bat '''
+@echo off
+set "DOCKER_CONFIG=%TEMP%\\pp-docker-auth-%BUILD_NUMBER%"
+
+if not exist "%DOCKER_CONFIG%" mkdir "%DOCKER_CONFIG%"
+
+powershell -NoProfile -Command "[Console]::Out.Write($env:DOCKER_TOKEN)" | docker login -u "%DOCKER_USER%" --password-stdin
+if errorlevel 1 exit /b 1
+
+docker push %IMAGE_REPO%:%BUILD_NUMBER%
+if errorlevel 1 exit /b 1
+
+docker push %IMAGE_REPO%:latest
+if errorlevel 1 exit /b 1
+'''
+                        } finally {
+                            bat(
+                                returnStatus: true,
+                                script: '''
+@echo off
+set "DOCKER_CONFIG=%TEMP%\\pp-docker-auth-%BUILD_NUMBER%"
+
+if exist "%DOCKER_CONFIG%" (
+    docker logout
+    rmdir /s /q "%DOCKER_CONFIG%"
+)
+'''
+                            )
+                        }
+                    }
+                }
+
+                echo 'Docker image berhasil di-push'
+            }
+        }
+
+        // STAGE 5: DEPLOY DOCKER COMPOSE
+        stage('Deploy') {
+            steps {
+                echo 'Melakukan deployment ParkirPintar...'
+
+                withCredentials([
+                    file(
+                        credentialsId: 'parkirpintar-env-file',
+                        variable: 'DEPLOY_ENV'
+                    )
+                ]) {
+                    bat '''
+@echo off
+set "IMAGE_NAME=%IMAGE_REPO%:%BUILD_NUMBER%"
+
+docker compose -p parkirpintar --env-file "%DEPLOY_ENV%" -f compose.deploy.yaml pull app
+if errorlevel 1 exit /b 1
+
+docker compose -p parkirpintar --env-file "%DEPLOY_ENV%" -f compose.deploy.yaml up -d --no-build
+if errorlevel 1 exit /b 1
+
+docker compose -p parkirpintar --env-file "%DEPLOY_ENV%" -f compose.deploy.yaml exec -T app php artisan migrate --force
+if errorlevel 1 exit /b 1
+
+docker compose -p parkirpintar --env-file "%DEPLOY_ENV%" -f compose.deploy.yaml ps
+if errorlevel 1 exit /b 1
+'''
+                }
+
+                echo 'Deployment Docker Compose selesai'
+            }
+        }
+
+        // STAGE 6: SMOKE TEST
+        stage('Smoke Test') {
+            steps {
+                echo 'Memeriksa endpoint /health ...'
+
+                retry(12) {
+                    sleep(time: 5, unit: 'SECONDS')
+
+                    bat '''
+@echo off
+curl.exe --fail --silent --show-error http://127.0.0.1:8000/health
+if errorlevel 1 exit /b 1
+'''
+                }
+
+                echo 'Smoke Test berhasil: HTTP 200'
+            }
+        }
     }
 
+    // POST ACTIONS
     post {
         always {
             script {
@@ -88,11 +215,11 @@ pipeline {
         }
 
         success {
-            echo 'ParkirPintar: Automated tests berhasil'
+            echo 'SUCCESS: Seluruh pipeline CI/CD ParkirPintar berhasil'
         }
 
         failure {
-            echo 'ParkirPintar: Pipeline gagal'
+            echo 'FAILED: Pipeline CI/CD ParkirPintar gagal'
         }
     }
 }
