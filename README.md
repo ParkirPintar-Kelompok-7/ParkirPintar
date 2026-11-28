@@ -331,3 +331,18 @@ Seluruh tahap Jenkins berhasil dijalankan dengan status akhir SUCCESS.
 Perbandingan Build #19 dan Build #20 membuktikan bahwa Quality Gate dapat menghentikan proses deployment ketika automated testing gagal dan mengizinkan deployment ketika seluruh pengujian berhasil.
 
 Hasil ini digunakan sebagai bukti implementasi QA dan CI/CD pada Tugas Besar Komputasi Awan Kelompok 7.
+
+### Verifikasi Pipeline dari Branch Main
+
+Pada 28 November 2026, Jenkins Build #22 berhasil dijalankan menggunakan
+commit 6b82c6e dari branch `main` setelah PR #13 di-merge.
+
+Hasil pengujian menunjukkan 71 tests dan 185 assertions berhasil.
+Docker image dipublikasikan dengan tag `fdhil17/parkirpintar:22`
+dan `fdhil17/parkirpintar:latest`.
+
+Deployment berhasil menggunakan Docker Compose, sedangkan Smoke Test
+mengembalikan HTTP 200 dengan status database `up`.
+
+Build #22 dijalankan secara manual untuk memverifikasi integrasi
+Jenkinsfile pada branch `main`.
