@@ -1,3 +1,4 @@
+
 services:
   app:
     image: ${IMAGE_NAME:-fdhil17/parkirpintar:latest}
@@ -20,6 +21,7 @@ services:
       db:
         condition: service_healthy
     networks:
+      - frontend
       - backend
 
   db:
@@ -41,8 +43,12 @@ services:
       - backend
 
 networks:
+  frontend:
+    driver: bridge
+
   backend:
     driver: bridge
+    internal: true
 
 volumes:
   mysql_data:
