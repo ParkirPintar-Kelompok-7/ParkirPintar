@@ -1,0 +1,325 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="NXRP_n9ZAJa8Wb5gpAjH">
+    <mxGraphModel dx="2146" dy="1171" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" plantUmlData="{&#xa;  &quot;data&quot;: &quot;\n@startuml\ntitle UML Activity Diagram - CI/CD ParkirPintar\n\nstart\n\n:Trigger pipeline:\\nPush ke GitHub via webhook/ngrok\\natau Jenkins Build Now;\n\n:Checkout branch devops/jenkinsfile;\n\n:Siapkan container pengujian Docker\\n(ci/Dockerfile.test);\n\n:Jalankan PHPUnit dengan SQLite in-memory;\n\n:Simpan laporan JUnit XML bila dihasilkan;\n\nif (Tahap Test berhasil?) then (Ya)\n\n  :Build Docker Image aplikasi;\n\n  :Push Image ke Docker Hub;\n\n  :Deploy melalui Docker Compose\\n(app + MySQL, migrate);\n\n  :Smoke Test GET /health;\n\n  if (HTTP 200?) then (Ya)\n    :Status SUCCESS;\n  else (Tidak)\n    :Status FAILURE;\n  endif\n\nelse (Tidak)\n\n  :Quality Gate memblokir pipeline;\n\n  :Build, Push, Deploy, dan Smoke Test dilewati;\n\n  :Status FAILURE;\n\nendif\n\n:Post action:\\nPublikasikan JUnit XML jika tersedia;\n\nstop\n\n@enduml\n&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="j-GtkB_e2ciMsLFi1l0w-1">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="start_0" plantUmlBaseStyle="ellipse;fillColor=#222222;strokeColor=#222222;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-2">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="ellipse;fillColor=#222222;strokeColor=#222222;" vertex="1">
+            <mxGeometry height="20" width="20" x="283" y="66.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Trigger pipeline:&#xa;Push ke GitHub via webhook/ngrok&#xa;atau Jenkins Build Now" plantUmlId="action_1" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Trigger pipeline:&#xa;Push ke GitHub via webhook/ngrok&#xa;atau Jenkins Build Now" id="j-GtkB_e2ciMsLFi1l0w-3">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="62" width="226" x="180" y="106.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_2" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-4">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-2" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-3">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="86.45" as="sourcePoint" />
+              <mxPoint x="293" y="106.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Checkout branch devops/jenkinsfile" plantUmlId="action_3" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Checkout branch devops/jenkinsfile" id="j-GtkB_e2ciMsLFi1l0w-5">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="230" x="178" y="188.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_4" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-6">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-3" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-5">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="168.45" as="sourcePoint" />
+              <mxPoint x="293" y="188.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Siapkan container pengujian Docker&#xa;(ci/Dockerfile.test)" plantUmlId="action_5" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Siapkan container pengujian Docker&#xa;(ci/Dockerfile.test)" id="j-GtkB_e2ciMsLFi1l0w-7">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="48" width="230" x="178" y="242.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_6" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-8">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-5" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-7">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="222.45" as="sourcePoint" />
+              <mxPoint x="293" y="242.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Jalankan PHPUnit dengan SQLite in-memory" plantUmlId="action_7" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Jalankan PHPUnit dengan SQLite in-memory" id="j-GtkB_e2ciMsLFi1l0w-9">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="276" x="155" y="310.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_8" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-10">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-7" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-9">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="290.45" as="sourcePoint" />
+              <mxPoint x="293" y="310.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Simpan laporan JUnit XML bila dihasilkan" plantUmlId="action_9" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Simpan laporan JUnit XML bila dihasilkan" id="j-GtkB_e2ciMsLFi1l0w-11">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="258" x="164" y="364.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_10" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-12">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-9" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-11">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="344.45" as="sourcePoint" />
+              <mxPoint x="293" y="364.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tahap Test berhasil?" plantUmlId="diamond_12" plantUmlBaseStyle="shape=hexagon;perimeter=hexagonPerimeter2;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=11;" plantUmlBaseValue="Tahap Test berhasil?" id="j-GtkB_e2ciMsLFi1l0w-13">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="shape=hexagon;perimeter=hexagonPerimeter2;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=11;" vertex="1">
+            <mxGeometry height="24" width="134" x="226" y="418.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_13" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-14">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-11" style="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-13">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="398.45" as="sourcePoint" />
+              <mxPoint x="293" y="418.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Ya" plantUmlId="e_14" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=left;align=right;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Ya" id="j-GtkB_e2ciMsLFi1l0w-15">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-13" style="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=left;align=right;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-16">
+            <mxGeometry relative="1" x="-1" as="geometry">
+              <Array as="points">
+                <mxPoint x="149" y="430.45" />
+              </Array>
+              <mxPoint x="226" y="430.45" as="sourcePoint" />
+              <mxPoint x="149" y="452.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Build Docker Image aplikasi" plantUmlId="action_16" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Build Docker Image aplikasi" id="j-GtkB_e2ciMsLFi1l0w-16">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="181" x="58.5" y="452.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Push Image ke Docker Hub" plantUmlId="action_17" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Push Image ke Docker Hub" id="j-GtkB_e2ciMsLFi1l0w-17">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="177" x="60.5" y="506.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_18" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-18">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-16" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-17">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="149" y="486.45" as="sourcePoint" />
+              <mxPoint x="149" y="506.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Deploy melalui Docker Compose&#xa;(app + MySQL, migrate)" plantUmlId="action_19" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Deploy melalui Docker Compose&#xa;(app + MySQL, migrate)" id="j-GtkB_e2ciMsLFi1l0w-19">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="48" width="210" x="44" y="560.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_20" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-20">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-17" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-19">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="149" y="540.45" as="sourcePoint" />
+              <mxPoint x="149" y="560.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Smoke Test GET /health" plantUmlId="action_21" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Smoke Test GET /health" id="j-GtkB_e2ciMsLFi1l0w-21">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="160" x="69" y="628.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_22" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-22">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-19" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-21">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="149" y="608.45" as="sourcePoint" />
+              <mxPoint x="149" y="628.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="HTTP 200?" plantUmlId="diamond_24" plantUmlBaseStyle="shape=hexagon;perimeter=hexagonPerimeter2;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=11;" plantUmlBaseValue="HTTP 200?" id="j-GtkB_e2ciMsLFi1l0w-23">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="shape=hexagon;perimeter=hexagonPerimeter2;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=11;" vertex="1">
+            <mxGeometry height="24" width="81" x="108.5" y="682.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_25" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-24">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-21" style="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-23">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="149" y="662.45" as="sourcePoint" />
+              <mxPoint x="149" y="682.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Ya" plantUmlId="e_26" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=left;align=right;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Ya" id="j-GtkB_e2ciMsLFi1l0w-25">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-23" style="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=left;align=right;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-26">
+            <mxGeometry relative="1" x="-1" as="geometry">
+              <Array as="points">
+                <mxPoint x="85" y="694.45" />
+              </Array>
+              <mxPoint x="108.5" y="694.45" as="sourcePoint" />
+              <mxPoint x="85" y="716.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Status SUCCESS" plantUmlId="action_28" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Status SUCCESS" id="j-GtkB_e2ciMsLFi1l0w-26">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="110" x="30" y="716.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tidak" plantUmlId="e_29" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=right;align=left;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Tidak" id="j-GtkB_e2ciMsLFi1l0w-27">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-23" style="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=right;align=left;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-28">
+            <mxGeometry relative="1" x="-1" as="geometry">
+              <Array as="points">
+                <mxPoint x="213" y="694.45" />
+              </Array>
+              <mxPoint x="189.5" y="694.45" as="sourcePoint" />
+              <mxPoint x="213" y="716.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Status FAILURE" plantUmlId="action_31" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Status FAILURE" id="j-GtkB_e2ciMsLFi1l0w-28">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="106" x="160" y="716.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="merge_32" plantUmlBaseStyle="rhombus;fillColor=#F1F1F1;strokeColor=#181818;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-29">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rhombus;fillColor=#F1F1F1;strokeColor=#181818;" vertex="1">
+            <mxGeometry height="24" width="24" x="137" y="756.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_33" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-30">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-26" style="endArrow=classic;endSize=8;strokeColor=#181818;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-29">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="85" y="768.45" />
+              </Array>
+              <mxPoint x="85" y="750.45" as="sourcePoint" />
+              <mxPoint x="137" y="768.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_35" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-31">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-28" style="endArrow=classic;endSize=8;strokeColor=#181818;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-29">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="213" y="768.45" />
+              </Array>
+              <mxPoint x="213" y="750.45" as="sourcePoint" />
+              <mxPoint x="161" y="768.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tidak" plantUmlId="e_37" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=right;align=left;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Tidak" id="j-GtkB_e2ciMsLFi1l0w-32">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-13" style="endArrow=classic;endSize=8;strokeColor=#181818;fontSize=11;verticalAlign=bottom;labelPosition=right;align=left;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-33">
+            <mxGeometry relative="1" x="-1" as="geometry">
+              <Array as="points">
+                <mxPoint x="437" y="430.45" />
+              </Array>
+              <mxPoint x="360" y="430.45" as="sourcePoint" />
+              <mxPoint x="437" y="452.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Quality Gate memblokir pipeline" plantUmlId="action_39" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Quality Gate memblokir pipeline" id="j-GtkB_e2ciMsLFi1l0w-33">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="208" x="333" y="452.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Build, Push, Deploy, dan Smoke Test dilewati" plantUmlId="action_40" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Build, Push, Deploy, dan Smoke Test dilewati" id="j-GtkB_e2ciMsLFi1l0w-34">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="281" x="296.5" y="506.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_41" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-35">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-33" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-34">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="437" y="486.45" as="sourcePoint" />
+              <mxPoint x="437" y="506.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Status FAILURE" plantUmlId="action_42" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Status FAILURE" id="j-GtkB_e2ciMsLFi1l0w-36">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="34" width="106" x="384" y="560.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_43" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-37">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-34" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-36">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="437" y="540.45" as="sourcePoint" />
+              <mxPoint x="437" y="560.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="merge_44" plantUmlBaseStyle="rhombus;fillColor=#F1F1F1;strokeColor=#181818;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-38">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rhombus;fillColor=#F1F1F1;strokeColor=#181818;" vertex="1">
+            <mxGeometry height="24" width="24" x="281" y="786.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_45" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-39">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-29" style="endArrow=classic;endSize=8;strokeColor=#181818;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-38">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="149" y="798.45" />
+              </Array>
+              <mxPoint x="149" y="780.45" as="sourcePoint" />
+              <mxPoint x="281" y="798.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_47" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-40">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-36" style="endArrow=classic;endSize=8;strokeColor=#181818;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-38">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="437" y="798.45" />
+              </Array>
+              <mxPoint x="437" y="594.45" as="sourcePoint" />
+              <mxPoint x="305" y="798.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Post action:&#xa;Publikasikan JUnit XML jika tersedia" plantUmlId="action_49" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" plantUmlBaseValue="Post action:&#xa;Publikasikan JUnit XML jika tersedia" id="j-GtkB_e2ciMsLFi1l0w-41">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="rounded=1;absoluteArcSize=1;arcSize=25;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;whiteSpace=wrap;fontSize=12;align=left;spacingLeft=8;" vertex="1">
+            <mxGeometry height="48" width="227" x="179.5" y="830.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_50" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;exitX=0.5;exitY=1;exitDx=0;exitDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-42">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-38" style="endArrow=classic;endSize=8;strokeColor=#181818;exitX=0.5;exitY=1;exitDx=0;exitDy=0;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-41">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="810.45" as="sourcePoint" />
+              <mxPoint x="293" y="830.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="stop_51" plantUmlBaseStyle="ellipse;shape=endState;fillColor=#222222;strokeColor=#222222;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-43">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="ellipse;shape=endState;fillColor=#222222;strokeColor=#222222;" vertex="1">
+            <mxGeometry height="22" width="22" x="282" y="898.45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="e_52" plantUmlBaseStyle="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="" id="j-GtkB_e2ciMsLFi1l0w-44">
+          <mxCell edge="1" parent="j-GtkB_e2ciMsLFi1l0w-1" source="j-GtkB_e2ciMsLFi1l0w-41" style="endArrow=classic;endSize=8;strokeColor=#181818;curved=0;rounded=0;fontSize=11;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="j-GtkB_e2ciMsLFi1l0w-43">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="293" y="878.45" as="sourcePoint" />
+              <mxPoint x="293" y="898.45" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="UML Activity Diagram - CI/CD ParkirPintar" plantUmlId="title_0" plantUmlBaseStyle="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;" plantUmlBaseValue="UML Activity Diagram - CI/CD ParkirPintar" id="j-GtkB_e2ciMsLFi1l0w-45">
+          <mxCell parent="j-GtkB_e2ciMsLFi1l0w-1" style="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;" vertex="1">
+            <mxGeometry height="24" width="319" x="144.25" y="30" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
