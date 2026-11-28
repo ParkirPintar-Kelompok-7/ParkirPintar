@@ -239,3 +239,95 @@ Kalau muncul conflict, buka file yang ditandai di VS Code, pilih versi yang bena
 | `git push` ditolak | Jalankan `git pull` lalu push ulang |
 | Port 8000 dipakai | `php artisan serve --port=8001` |
 | Respons API berupa halaman HTML / redirect | Tambahkan header `Accept: application/json` |
+
+---
+
+## Quality Assurance dan CI/CD Pipeline
+
+### Automated Testing
+
+ParkirPintar menggunakan PHPUnit untuk menjalankan unit test dan feature test secara otomatis. Pengujian menggunakan database SQLite in-memory agar tidak mengganggu database MySQL aplikasi.
+
+Pengujian lokal dapat dijalankan dengan perintah `php artisan test`.
+
+Pada Jenkins, automated testing dijalankan di dalam container Docker. Hasil pengujian disimpan dalam format JUnit XML dan dipublikasikan melalui Jenkins Test Result.
+
+### Pengujian Tambahan QA Engineer
+
+QA Engineer menambahkan tiga skenario pengujian pada file `tests/Feature/QABusinessFlowTest.php`, yaitu:
+
+1. Menolak check-in dengan plat nomor yang masih ACTIVE di area parkir lain dengan HTTP 409.
+2. Memastikan motor yang parkir tepat 15 menit tidak dikenakan biaya.
+3. Memastikan motor yang parkir selama 15 menit 1 detik dikenakan biaya Rp2.000.
+
+Pengujian tambahan tersebut telah digabungkan melalui Pull Request #11 ke branch `main`.
+
+### Tahapan CI/CD Jenkins
+
+Pipeline Jenkins ParkirPintar terdiri dari enam tahap:
+
+| Tahap | Keterangan |
+|---|---|
+| Checkout | Mengambil source code dari GitHub |
+| Test | Menjalankan PHPUnit dan membuat laporan JUnit XML |
+| Build Image | Membangun Docker image aplikasi |
+| Push Image | Mengunggah image ke Docker Hub |
+| Deploy | Menjalankan aplikasi menggunakan Docker Compose |
+| Smoke Test | Memeriksa endpoint `/health` dengan HTTP 200 |
+
+Tahap Test berfungsi sebagai Quality Gate. Apabila automated testing gagal, Jenkins menghentikan pipeline sehingga proses build dan deployment tidak dilanjutkan.
+
+### UML Activity Diagram CI/CD
+
+Diagram berikut menggambarkan proses CI/CD dari trigger GitHub atau Build Now hingga deployment aplikasi, termasuk mekanisme Quality Gate ketika pengujian gagal.
+
+![UML Activity Diagram CI/CD ParkirPintar](docs/CI_CD_ACTIVITY.png)
+
+File diagram yang dapat diedit:
+
+[CI_CD_ACTIVITY.drawio](docs/CI_CD_ACTIVITY.drawio)
+
+Dokumentasi alur pipeline:
+
+[CI_CD_PIPELINE.md](docs/CI_CD_PIPELINE.md)
+
+### Demonstrasi Quality Gate FAILED dan SUCCESS
+
+Pengujian Quality Gate dilakukan melalui simulasi satu PHPUnit test yang sengaja gagal menggunakan fitur Jenkins Replay, kemudian dilanjutkan dengan eksekusi pipeline normal.
+
+| Build | Hasil | Tests | Assertions | Failures |
+|---|---|---:|---:|---:|
+| #19 | FAILURE | 72 | 186 | 1 |
+| #20 | SUCCESS | 71 | 185 | 0 |
+
+#### Jenkins Build #19 — FAILURE
+
+Build #19 merupakan simulasi menggunakan Jenkins Replay dari Build #17. Satu test sementara bernama `QualityGateDemoTest.php` dibuat di dalam container pengujian dengan assertion `assertTrue(false)`.
+
+Hasil PHPUnit menunjukkan 72 tests, 186 assertions, dan 1 failure.
+
+Jenkins menghentikan pipeline pada tahap Test. Tahap Build Image, Push Image, Deploy, dan Smoke Test tidak dijalankan.
+
+Laporan JUnit XML tetap berhasil direkam. Simulasi ini tidak mengubah source code maupun Jenkinsfile asli di GitHub.
+
+#### Jenkins Build #20 — SUCCESS
+
+Build #20 dijalankan menggunakan Build Now dengan Jenkinsfile asli dari branch `devops/jenkinsfile`.
+
+Seluruh 71 automated test berhasil dengan 185 assertions dan tanpa kegagalan.
+
+Docker image berhasil dibuat dan diunggah ke Docker Hub menggunakan tag `fdhil17/parkirpintar:20` dan `fdhil17/parkirpintar:latest`.
+
+Deployment Docker Compose berhasil menjalankan aplikasi dan database MySQL 8.4 dengan status healthy.
+
+Endpoint `/health` memberikan HTTP 200 dengan respons:
+
+`{"status":"ok","database":"up"}`
+
+Seluruh tahap Jenkins berhasil dijalankan dengan status akhir SUCCESS.
+
+### Hasil Pengujian Quality Gate
+
+Perbandingan Build #19 dan Build #20 membuktikan bahwa Quality Gate dapat menghentikan proses deployment ketika automated testing gagal dan mengizinkan deployment ketika seluruh pengujian berhasil.
+
+Hasil ini digunakan sebagai bukti implementasi QA dan CI/CD pada Tugas Besar Komputasi Awan Kelompok 7.
