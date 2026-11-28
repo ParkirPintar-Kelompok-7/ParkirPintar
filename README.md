@@ -239,3 +239,57 @@ Kalau muncul conflict, buka file yang ditandai di VS Code, pilih versi yang bena
 | `git push` ditolak | Jalankan `git pull` lalu push ulang |
 | Port 8000 dipakai | `php artisan serve --port=8001` |
 | Respons API berupa halaman HTML / redirect | Tambahkan header `Accept: application/json` |
+
+## Quality Assurance dan CI/CD Pipeline
+
+### Automated Testing
+
+ParkirPintar menggunakan PHPUnit untuk menjalankan unit test dan feature test secara otomatis. Pengujian dilakukan untuk memastikan fungsi utama aplikasi berjalan sesuai aturan bisnis, khususnya proses check-in, check-out, perhitungan tarif, kapasitas area parkir, dan laporan transaksi.
+
+Pengujian menggunakan SQLite in-memory melalui konfigurasi `phpunit.xml`, sehingga tidak mengganggu database MySQL yang digunakan aplikasi.
+
+Untuk menjalankan seluruh pengujian, gunakan perintah `php artisan test`.
+
+Hasil pengujian pada Jenkins Build #17 menunjukkan **71 tests passed dengan 185 assertions**. Hasil pengujian juga dicatat dalam format JUnit XML dan dapat dipantau melalui fitur Test Result Trend pada Jenkins.
+
+### Skenario Pengujian QA
+
+Pengujian tambahan dilakukan melalui file `tests/Feature/QABusinessFlowTest.php` dengan tiga skenario berikut:
+
+1. **Validasi plat nomor aktif:** Sistem menolak check-in apabila plat nomor kendaraan masih memiliki transaksi parkir aktif, meskipun menggunakan area berbeda.
+2. **Validasi tarif gratis:** Parkir motor selama tepat 15 menit tidak dikenakan biaya.
+3. **Validasi tarif berbayar:** Parkir motor selama 15 menit 1 detik dikenakan biaya Rp2.000.
+
+Pengujian tersebut telah terintegrasi ke branch `main` melalui Pull Request #11.
+
+### Alur CI/CD Pipeline Jenkins
+
+Pipeline CI/CD ParkirPintar dikonfigurasi menggunakan Jenkinsfile pada branch `devops/jenkinsfile`. Pipeline terdiri atas enam tahap utama:
+
+| Tahap | Deskripsi |
+|---|---|
+| Checkout | Mengambil source code dari repository GitHub |
+| Test | Menjalankan PHPUnit melalui container Docker dan menghasilkan laporan JUnit XML |
+| Build Image | Membangun Docker image aplikasi ParkirPintar |
+| Push Image | Mengunggah Docker image ke Docker Hub |
+| Deploy | Menjalankan aplikasi menggunakan Docker Compose dan migrasi database |
+| Smoke Test | Memastikan endpoint `/health` memberikan respons HTTP 200 |
+
+### Quality Gate dan Hasil Pipeline
+
+Quality Gate diterapkan pada tahap Test untuk memastikan hanya kode yang lulus automated testing yang dapat dilanjutkan ke proses build dan deployment.
+
+Pengujian Quality Gate dilakukan melalui beberapa build Jenkins:
+
+- **Build #11 — FAILURE:** Simulasi satu automated test gagal sehingga pipeline berhenti sebelum deployment.
+- **Build #12 — SUCCESS:** Setelah test demonstrasi kegagalan dibatalkan, pipeline kembali berhasil.
+- **Build #16 — FAILURE:** Pipeline gagal karena Docker Engine tidak berjalan, sebelum PHPUnit dieksekusi.
+- **Build #17 — SUCCESS:** Seluruh 71 automated test berhasil, Docker image di-push, aplikasi di-deploy, dan Smoke Test menghasilkan HTTP 200.
+
+### Diagram Alur CI/CD Pipeline
+
+Diagram berikut menggambarkan proses CI/CD ParkirPintar, mulai dari trigger Jenkins hingga deployment, termasuk mekanisme Quality Gate ketika pengujian mengalami kegagalan.
+
+![UML Activity Diagram CI/CD ParkirPintar](docs/CI_CD_ACTIVITY.png)
+
+Diagram dibuat menggunakan draw.io dalam bentuk UML Activity Diagram.
